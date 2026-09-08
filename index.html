@@ -1,18 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Chat</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <form id="messageForm">
-      <input type="text" name="name" id="name" />
-      <input type="text" name="message" id="message" />
-      <input type="submit" value="send" />
-    </form>
-    <div id="chat"></div>
+    <div class="chats">
+      <div class="chat-panel" id="client1">
+        <h2 class="chat-title">Клиент 1</h2>
+        <div class="chat" id="client1-chat"></div>
+        <form class="message-form" id="client1-form">
+          <input type="text" name="name" placeholder="Имя" />
+          <input type="text" name="message" placeholder="Сообщение" />
+          <input type="submit" value="Отправить" />
+        </form>
+      </div>
+      <div class="chat-panel" id="client2">
+        <h2 class="chat-title">Клиент 2</h2>
+        <div class="chat" id="client2-chat"></div>
+        <form class="message-form" id="client2-form">
+          <input type="text" name="name" placeholder="Имя" />
+          <input type="text" name="message" placeholder="Сообщение" />
+          <input type="submit" value="Отправить" />
+        </form>
+      </div>
+    </div>
     <script type="module" src="client.js"></script>
   </body>
 </html>

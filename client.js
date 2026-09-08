@@ -1,32 +1,40 @@
-const chatEl = document.getElementById("chat");
-const formEl = document.getElementById("messageForm");
+const WS_URL = "ws://127.0.0.1:8000";
 
-const ws = new WebSocket("ws://127.0.0.1:8000");
-ws.onmessage = (message) => {
-  console.log(JSON.parse(message.data));
-  const messages = JSON.parse(message.data);
-  messages.forEach((value) => {
+function createClient(panelId) {
+  const chatEl = document.getElementById(`${panelId}-chat`);
+  const formEl = document.getElementById(`${panelId}-form`);
+
+  const appendMessage = (name, message) => {
     const messageEl = document.createElement("div");
-    messageEl.appendChild(document.createTextNode(`${value.name}: ${value.message}`));
+    messageEl.className = "chat-message";
+    messageEl.appendChild(document.createTextNode(`${name}: ${message}`));
     chatEl.appendChild(messageEl);
-  });
-};
-ws.onopen = ()=>{
-  console.log('ws open')
-}
-ws.onclose = () => {
-  console.log('ws close')
-};
+    chatEl.scrollTop = chatEl.scrollHeight;
+  };
 
-const send = (event) => {
-  event.preventDefault();
-  const name = document.getElementById("name").value;
-  const message = document.getElementById("message").value;
-  ws.send(
-    JSON.stringify({
-      name,
-      message,
-    })
-  );
-};
-formEl.addEventListener("submit", send);
+  const ws = new WebSocket(WS_URL);
+
+  ws.onmessage = (message) => {
+    const messages = JSON.parse(message.data);
+    messages.forEach((value) => appendMessage(value.name, value.message));
+  };
+
+  ws.onopen = () => {
+    console.log(`${panelId}: ws open`);
+  };
+
+  ws.onclose = () => {
+    console.log(`${panelId}: ws close`);
+  };
+
+  formEl.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const name = formEl.name.value;
+    const message = formEl.message.value;
+    ws.send(JSON.stringify({ name, message }));
+    formEl.message.value = "";
+  });
+}
+
+createClient("client1");
+createClient("client2");
